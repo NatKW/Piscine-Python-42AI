@@ -10,7 +10,7 @@ def generator(text, sep=" ", option=None):
 	try:
 		words = text.slit(sep)
 		for word in words:
-			yield word
+			yield (words)
 	except:
 		if type(text) is not str \
 		or option not in ['None', 'shuffle', 'unique', 'ordered']:
@@ -23,10 +23,14 @@ def generator(text, sep=" ", option=None):
 
 if __name__ == '__main__':
     text = "Le Lorem Ipsum est simplememt du faux texte."
-	for word in generator(generator)
+	for word in generator(text)
 		if word
 			print(word)
 	print("\n")
+
+	for words in generator(text):
+        print("- '%s'" %words)
+    print("---------------------------------------------------------------")
 	# for word in generator(text, sep=" ", option="shuffle"):
 	# 	print(word)
 	# for word in generator(text, sep=" ", option="ordered"):
