@@ -9,15 +9,18 @@ def ft_map(function_to_apply, iterable):
 	
 	try:
 		iterator = iter(iterable)
-		result = []
 		for i in iterator:
-			result.append(function_to_apply(i))
-		return result
-	except TypeError:
+			i = function_to_apply(i)
+			yield i
+	except TypeError as te:
 		print(iterable, 'is not iterable')
+
 
 if __name__ == '__main__':
 	x = [1, 2, 3, 4, 5]
 	print(list(ft_map(lambda t: t + 1, x)))
+	print(ft_map(lambda t: t + 1, x))
 	x = [1, "a", 3, 4, 5]
 	print(list(ft_map(lambda t: t + 1, x)))
+
+

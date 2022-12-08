@@ -10,7 +10,6 @@ def ft_reduce(function_to_apply, iterable):
 	None if the iterable can not be used by the function.
 	"""
 	try:
-		isinstance(iterable, Iterable)
 		result = iterable[0]
 		for i in iterable[1:]:
 			result = function_to_apply(result, i)
@@ -22,6 +21,7 @@ if __name__ == '__main__':
 
 	lst = ['H','e','l','l','o',' ','W','o','r','l','d']
 	print(ft_reduce(lambda u, v: u + v, lst))
+		print(ft_reduce(lambda u, v: u + v, lst))
 	# Output:
 	#"Hello World"
 	lst = ['H','e','l','l','o',' ','W','o','r','l',1]

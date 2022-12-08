@@ -9,12 +9,8 @@ def ft_filter(function_to_apply, iterable):
 	"""
 	
 	try:
-		iterator = iter(iterable)
-		result = []
-		for i in iterator:
-			if function_to_apply(i) == True:
-				result.append(i)
-		return result
+		[i for i in iterable if function_to_apply(i)]
+		yield i
 	except TypeError:
 		print(iterable, 'is not iterable')
 
@@ -22,5 +18,6 @@ if __name__ == '__main__':
 
 	x = [1, 2, 3, 4, 5]
 	print(list(ft_filter(lambda dum: not (dum % 2), x)))
+	print(ft_filter(lambda dum: not (dum % 2), x))
 	# Output:
 	#[2, 4]
