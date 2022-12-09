@@ -4,17 +4,18 @@ import os
 
 def log(func):
 	user = os.environ['USER']
-	task = func.__name__.replace('_', " ").capitalize()
+	task = func.__name__.replace('_', " ").title()
 	def inner(*args, **kwargs):
-		start = time.time()
+		start_time = time.time()
 		result = func(*args, **kwargs)
-		end = time.time()
+		elapsed_time = time.time() - start_time
+		unit = 's'
+		if elapsed_time < 0.001:
+			elapsed_time *= 1000
+			unit = 'ms'
 		with open("machine_log", "a") as f:
-			f.write(user)
-			f.write('Running: ')
-			f.write(task)
-			f.write(str(end-start))
-			f.write('\n')
+			ret =  f'({user})Running: {task:<15} [exec-time = {elapsed_time:.3f} {unit}]\n'
+			f.write(ret)
 		return result
 	return inner
 
