@@ -4,35 +4,39 @@ import csv
 
 class CsvReader():
 	def __init__(self, filename=None, sep=',', header=False, skip_top=0, skip_bottom=0):
-		if not isinstance(filename, str) and isinstance(sep, str) and isinstance(header, bool) \
-		and isinstance(skip_bottom, int) and isinstance(skip_top, int):
-			exit()
+		assert isinstance(filename, str) and isinstance(sep, str) and isinstance(header, bool) \
+		and isinstance(skip_bottom, int) and isinstance(skip_top, int), "Check class parameters"
+		
 		self.filename = filename
 		self.sep = sep
+		self.file_read = None
 		self.header = header
-		self.skip_top = skip_top + header
+		self.skip_top = skip_top
 		self.skip_bottom = skip_bottom
+		self.datas = []
 
 	def __enter__(self):
-		with open(self, 'r') as file:
-			reader = csv.reader(file)
-			writer = csv.writer(file)
-			for row in reader:
-				if len(row) < 5 or len(row) > 100:
-					continue
-			writer.writerow(row)
+		self.file_read = open(self.filename, 'r')
+		csv_reader = csv.reader(self.file_read, delimiter=self.sep)
+		for row in csv_reader:
+				self.datas.append(row)
+		return (self)
 	
-	def __exit__(self):
-		file.close()
+	def __exit__(self, exception_type, exception_value, exception_traceback):
+		self.datas = []
+		self.file_read.close()
 	
 	def getdata(self):
 		""" Retrieves the data/records from skip_top to skip bottom.
 		Return:
 		nested list (list(list, list, ...)) representing the data.
 		"""
-		rows = []
-		for row in csvreader:
-			rows.append(row)
+		
+		start = self.skip_top
+		end = len(self.datas) - start
+		if self.header:
+			return self.datas[start + 1:end]
+		return self.datas[start:end]
 
 	def getheader(self):
 		""" Retrieves the header from csv file.
@@ -40,14 +44,27 @@ class CsvReader():
 		list: representing the data (when self.header is True).
 		None: (when self.header is False).
 		"""
-		if self.header == True:
-			header = []
-			header = next(csvreader)
+		if self.header:
+			return self.datas[0]
+		return None
 
 if __name__ == "__main__":
-	with CsvReader('good.csv') as file:
+	with CsvReader('good.csv',',', True, 0, 18) as file:
 		if file == None:
-			print("File is corrupted")
-		data = file.getdata()
-		header = file.getheader()
+			print("File is missing")
+		print('Header==True')
+		print('Header :', file.getheader(), end = "\n")
+		print('Datas :', file.getdata(), end = "\n\n")
+	with CsvReader('good.csv',',', False, 0, 10) as file:
+		if file == None:
+			print("File is missing")
+		print('Header==False')
+		print('Header :', file.getheader(), end = "\n")
+		print('Datas :', file.getdata(), end = "\n\n")
+	with CsvReader('bad.csv',',', True, 0, 15) as file:
+		if file == None:
+			print("File is missing")
+		print('Bad csv')
+		print('Header :', file.getheader(), end = "\n")
+		print('Datas :', file.getdata(), end = "\n\n")
 
